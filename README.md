@@ -19,8 +19,10 @@ A powerful tool to dynamically generate fully functional ASP.NET Core API projec
 ## Project Structure
 The `ProjectGenerator` is organized as follows:
 
+```bash
 NZWalks/ 
 ├── ProjectGenerator/ 
+ 
 │   ├── Program.cs 
 │   ├── Models/ 
 │   │ └── ProjectConfiguration.cs 
@@ -34,7 +36,7 @@ NZWalks/
 │        ├── nzwalks.yaml 
 │        ├── library.yaml 
 │        └── parking.yaml
-
+```
 
 ## Usage Instructions
 
