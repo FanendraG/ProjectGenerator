@@ -38,6 +38,13 @@ NZWalks/
 │        └── parking.yaml
 ```
 
+
+## Requirements
+- **.NET SDK 8.0: Install the latest .NET SDK from [Microsoft](https://dotnet.microsoft.com/).
+- **SQL Server**: Ensure SQL Server is installed and running. The generator configures EntityFramework Core with SQL Server as the default database provider.
+
+> **Note**: If you don’t have SQL Server installed, you can use **SQL Server Express** or a cloud-hosted SQL Server instance (e.g., Azure SQL).
+
 ## Usage Instructions
 
 # Add required NuGet packages
