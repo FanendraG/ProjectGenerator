@@ -40,6 +40,15 @@ NZWalks/
 
 ## Usage Instructions
 
+# Add required NuGet packages
+```bash
+dotnet add package YamlDotNet --version 13.7.1
+dotnet add package Microsoft.EntityFrameworkCore --version 8.0.0
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.0
+dotnet add package AutoMapper --version 12.0.1
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 8.0.0
+```
+
 ### Step 1: Install EF Core Tools
 Ensure EF Core tools are installed globally:
 ```bash
