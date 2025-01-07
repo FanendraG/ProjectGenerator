@@ -1,0 +1,272 @@
+version: "1.0"
+solution:
+  name: "NZWalks"
+  outputPath: "C:/Projects/NZWalks"
+  projects:
+    - name: "NZWalks.API"
+      type: "webapi"
+      targetFramework: "net8.0"
+      features:
+        - swagger
+        - logging
+        - entityframework
+        - automapper
+      
+      models:
+        - name: "Difficulty"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "Name"
+              type: "string"
+              maxLength: 50
+              required: true
+
+        - name: "Region"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "Code"
+              type: "string"
+              maxLength: 10
+              required: true
+            - name: "Name"
+              type: "string"
+              maxLength: 100
+              required: true
+            - name: "ImageUrl"
+              type: "string"
+              nullable: true
+
+        - name: "Walk"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "Name"
+              type: "string"
+              maxLength: 100
+              required: true
+            - name: "Description"
+              type: "string"
+              maxLength: 1000
+              required: true
+            - name: "LengthInKm"
+              type: "double"
+              required: true
+            - name: "RegionId"
+              type: "Guid"
+              isFK: true
+              references: "Region"
+            - name: "DifficultyId"
+              type: "Guid"
+              isFK: true
+              references: "Difficulty"
+      seedData:
+        - entity: "Difficulty"
+          values:
+            - Id: "54466F17-02AF-48E7-8ED3-5A4A8BFACF6F"
+              Name: "Easy"
+            - Id: "EA294873-7A8C-4C0F-BFA7-A2EB492CBF8C"
+              Name: "Moderate"
+            - Id: "F808DDCD-B5E5-4D80-B732-1CA523E48434"
+              Name: "Hard"
+
+        - entity: "Region"
+          values:
+            - Id: "906CB139-415A-4BBB-A174-1A1FAF9FB1F6"
+              Code: "NSN"
+              Name: "Nelson"
+              ImageUrl: "https://images.pexels.com/photos/13918194/pexels-photo-13918194.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            - Id: "CFA06ED2-BF65-4B65-93ED-C9D286DDB0DE"
+              Code: "WGN"
+              Name: "Wellington"
+              ImageUrl: "https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+
+        - entity: "Walk"
+          values:
+            - Id: "1AD1E302-2E30-4FB4-BD71-08DD244DB39B"
+              Name: "Mount Victoria Lookout Walk"
+              Description: "This is an Easy 20-30 minute to the lookout, which offers panoramic views of Wellington City, harbor and the surrounding hills"
+              LengthInKm: 5.0
+              RegionId: "CFA06ED2-BF65-4B65-93ED-C9D286DDB0DE"
+              DifficultyId: "54466F17-02AF-48E7-8ED3-5A4A8BFACF6F"
+            - Id: "77777777-7777-7777-7777-777777777777"
+              Name: "Walk 2"
+              Description: "Mountain hike"
+              LengthInKm: 15.0
+              RegionId: "906CB139-415A-4BBB-A174-1A1FAF9FB1F6"
+              DifficultyId: "EA294873-7A8C-4C0F-BFA7-A2EB492CBF8C"         
+
+      dtos:
+      - name: "RegionDto"
+        model: "Region"
+        properties:
+          - name: "Id"
+            type: "Guid"
+          - name: "Code"
+            type: "string"
+          - name: "Name"
+            type: "string"
+          - name: "ImageUrl"
+            type: "string"
+
+      - name: "AddRegionRequestDto"
+        model: "Region"
+        properties:
+          - name: "Code"
+            type: "string"
+          - name: "Name"
+            type: "string"
+          - name: "ImageUrl"
+            type: "string"
+
+      - name: "UpdateRegionRequestDto"
+        model: "Region"
+        properties:
+          - name: "Code"
+            type: "string"
+          - name: "Name"
+            type: "string"
+          - name: "ImageUrl"
+            type: "string"
+
+      - name: "DifficultyDto"
+        model: "Difficulty"
+        properties:
+          - name: "Id"
+            type: "Guid"
+          - name: "Name"
+            type: "string"
+
+      - name: "AddDifficultyRequestDto"
+        model: "Difficulty"
+        properties:
+          - name: "Name"
+            type: "string"
+
+      - name: "UpdateDifficultyRequestDto"
+        model: "Difficulty"
+        properties:
+          - name: "Name"
+            type: "string"
+
+      - name: "WalkDto"
+        model: "Walk"
+        properties:
+          - name: "Id"
+            type: "Guid"
+          - name: "Name"
+            type: "string"
+          - name: "Description"
+            type: "string"
+          - name: "LengthInKm"
+            type: "double"
+          - name: "RegionId"
+            type: "Guid"
+          - name: "DifficultyId"
+            type: "Guid"
+          - name: "Region"
+            type: "RegionDto"
+          - name: "Difficulty"
+            type: "DifficultyDto"
+
+      - name: "AddWalkRequestDto"
+        model: "Walk"
+        properties:
+          - name: "Name"
+            type: "string"
+          - name: "Description"
+            type: "string"
+          - name: "LengthInKm"
+            type: "double"
+          - name: "RegionId"
+            type: "Guid"
+          - name: "DifficultyId"
+            type: "Guid"
+
+      - name: "UpdateWalkRequestDto"
+        model: "Walk"
+        properties:
+          - name: "Name"
+            type: "string"
+          - name: "Description"
+            type: "string"
+          - name: "LengthInKm"
+            type: "double"
+          - name: "RegionId"
+            type: "Guid"
+          - name: "DifficultyId"
+            type: "Guid"
+
+
+      repositories:
+        - name: "IRegionRepository"
+          model: "Region"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "IDifficultyRepository"
+          model: "Difficulty"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "IWalkRepository"
+          model: "Walk"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+      dbContext:
+        name: "NZWalksDbContext"
+        connectionString: "Server=localhost;Database=NZWalks2Db;Trusted_Connection=True;TrustServerCertificate=True"
+
+      controllers:
+          - name: "DifficultiesController"
+            model: "Difficulty"
+            dto: "DifficultyDto"
+            createDto: "AddDifficultyRequestDto"  
+            updateDto: "UpdateDifficultyRequestDto"  
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"
+
+          - name: "RegionsController"
+            model: "Region"
+            dto: "RegionDto"
+            createDto: "AddRegionRequestDto"
+            updateDto: "UpdateRegionRequestDto"
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"
+
+          - name: "WalksController"
+            model: "Walk"
+            dto: "WalkDto"
+            createDto: "AddWalkRequestDto"  
+            updateDto: "UpdateWalkRequestDto"  
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"

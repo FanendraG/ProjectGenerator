@@ -1,0 +1,388 @@
+version: "1.0"
+solution:
+  name: "ParkingAPI"
+  outputPath: "C:/Projects/ParkingAPI"
+  projects:
+    - name: "ParkingAPI"
+      type: "webapi"
+      targetFramework: "net8.0"
+      features:
+        - swagger
+        - logging
+        - entityframework
+        - automapper
+
+      models:
+        - name: "ParkingLot"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "Name"
+              type: "string"
+              maxLength: 100
+              required: true
+            - name: "Location"
+              type: "string"
+              maxLength: 200
+              required: true
+            - name: "Capacity"
+              type: "int"
+              required: true
+
+        - name: "ParkingSlot"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "SlotNumber"
+              type: "int"
+              required: true
+            - name: "IsOccupied"
+              type: "bool"
+              required: true
+            - name: "ParkingLotId"
+              type: "Guid"
+              isFK: true
+              references: "ParkingLot"
+
+        - name: "Vehicle"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "LicensePlate"
+              type: "string"
+              maxLength: 15
+              required: true
+            - name: "Type"
+              type: "string"
+              maxLength: 50
+              required: true
+            - name: "ParkingSlotId"
+              type: "Guid"
+              isFK: true
+              references: "ParkingSlot"
+            - name: "DriverId"
+              type: "Guid"
+              isFK: true
+              references: "Driver"
+
+        - name: "Driver"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "Name"
+              type: "string"
+              maxLength: 100
+              required: true
+            - name: "PhoneNumber"
+              type: "string"
+              maxLength: 15
+              required: true
+
+      dtos:
+        - name: "ParkingLotDto"
+          model: "ParkingLot"
+          properties:
+            - name: "Id"
+              type: "Guid"
+            - name: "Name"
+              type: "string"
+            - name: "Location"
+              type: "string"
+            - name: "Capacity"
+              type: "int"
+
+        - name: "AddParkingLotRequestDto"
+          model: "ParkingLot"
+          properties:
+            - name: "Name"
+              type: "string"
+            - name: "Location"
+              type: "string"
+            - name: "Capacity"
+              type: "int"
+
+        - name: "ParkingSlotDto"
+          model: "ParkingSlot"
+          properties:
+            - name: "Id"
+              type: "Guid"
+            - name: "SlotNumber"
+              type: "int"
+            - name: "IsOccupied"
+              type: "bool"
+            - name: "ParkingLotId"
+              type: "Guid"
+            - name: "ParkingLot" # Navigational Property
+              type: "ParkingLotDto"
+
+        - name: "VehicleDto"
+          model: "Vehicle"
+          properties:
+            - name: "Id"
+              type: "Guid"
+            - name: "LicensePlate"
+              type: "string"
+            - name: "Type"
+              type: "string"
+            - name: "ParkingSlotId"
+              type: "Guid"
+            - name: "DriverId"
+              type: "Guid"
+            - name: "ParkingSlot" # Navigational Property
+              type: "ParkingSlotDto"
+            - name: "Driver" # Navigational Property
+              type: "DriverDto"
+
+        - name: "DriverDto"
+          model: "Driver"
+          properties:
+            - name: "Id"
+              type: "Guid"
+            - name: "Name"
+              type: "string"
+            - name: "PhoneNumber"
+              type: "string"
+        - name: "AddParkingLotRequestDto"
+          model: "ParkingLot"
+          properties:
+              - name: "Name"
+                type: "string"
+              - name: "Location"
+                type: "string"
+              - name: "Capacity"
+                type: "int"
+
+        - name: "AddParkingSlotRequestDto"
+          model: "ParkingSlot"
+          properties:
+              - name: "SlotNumber"
+                type: "int"
+              - name: "IsOccupied"
+                type: "bool"
+              - name: "ParkingLotId"
+                type: "Guid"
+
+        - name: "UpdateParkingSlotRequestDto"
+          model: "ParkingSlot"
+          properties:
+              - name: "SlotNumber"
+                type: "int"
+              - name: "IsOccupied"
+                type: "bool"
+              - name: "ParkingLotId"
+                type: "Guid"
+
+        - name: "AddVehicleRequestDto"
+          model: "Vehicle"
+          properties:
+              - name: "LicensePlate"
+                type: "string"
+              - name: "Type"
+                type: "string"
+              - name: "ParkingSlotId"
+                type: "Guid"
+              - name: "DriverId"
+                type: "Guid"
+
+        - name: "UpdateVehicleRequestDto"
+          model: "Vehicle"
+          properties:
+              - name: "LicensePlate"
+                type: "string"
+              - name: "Type"
+                type: "string"
+              - name: "ParkingSlotId"
+                type: "Guid"
+              - name: "DriverId"
+                type: "Guid"
+
+        - name: "AddDriverRequestDto"
+          model: "Driver"
+          properties:
+              - name: "Name"
+                type: "string"
+              - name: "PhoneNumber"
+                type: "string"
+
+        - name: "UpdateDriverRequestDto"
+          model: "Driver"
+          properties:
+              - name: "Name"
+                type: "string"
+              - name: "PhoneNumber"
+                type: "string" 
+
+      repositories:
+        - name: "IParkingLotRepository"
+          model: "ParkingLot"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "IParkingSlotRepository"
+          model: "ParkingSlot"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "IVehicleRepository"
+          model: "Vehicle"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "IDriverRepository"
+          model: "Driver"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+      controllers:
+          - name: "ParkingLotsController"
+            model: "ParkingLot"
+            dto: "ParkingLotDto"
+            createDto: "AddParkingLotRequestDto"
+            updateDto: "AddParkingLotRequestDto"  # Assuming Create and Update use the same DTO
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"
+
+          - name: "ParkingSlotsController"
+            model: "ParkingSlot"
+            dto: "ParkingSlotDto"
+            createDto: "AddParkingSlotRequestDto"
+            updateDto: "UpdateParkingSlotRequestDto"
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"
+
+          - name: "VehiclesController"
+            model: "Vehicle"
+            dto: "VehicleDto"
+            createDto: "AddVehicleRequestDto"
+            updateDto: "UpdateVehicleRequestDto"
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"
+
+          - name: "DriversController"
+            model: "Driver"
+            dto: "DriverDto"
+            createDto: "AddDriverRequestDto"
+            updateDto: "UpdateDriverRequestDto"
+            operations:
+              - "GetAll"
+              - "GetById"
+              - "Create"
+              - "Update"
+              - "Delete"
+
+
+      dbContext:
+        name: "ParkingDbContext"
+        connectionString: "Server=localhost;Database=ParkingDB;Trusted_Connection=True;TrustServerCertificate=True"
+
+      seedData:
+          - entity: "ParkingLot"
+            values:
+              - Id: "11111111-1111-1111-1111-111111111111"
+                Name: "Lot A"
+                Location: "Downtown"
+                Capacity: 50
+
+              - Id: "22222222-2222-2222-2222-222222222222"
+                Name: "Lot B"
+                Location: "Uptown"
+                Capacity: 30
+
+              - Id: "33333333-3333-3333-3333-333333333333"
+                Name: "Lot C"
+                Location: "Midtown"
+                Capacity: 20
+
+          - entity: "ParkingSlot"
+            values:
+              - Id: "44444444-4444-4444-4444-444444444444"
+                SlotNumber: 1
+                IsOccupied: false
+                ParkingLotId: "11111111-1111-1111-1111-111111111111"
+
+              - Id: "55555555-5555-5555-5555-555555555555"
+                SlotNumber: 2
+                IsOccupied: true
+                ParkingLotId: "11111111-1111-1111-1111-111111111111"
+
+              - Id: "66666666-6666-6666-6666-666666666666"
+                SlotNumber: 3
+                IsOccupied: false
+                ParkingLotId: "22222222-2222-2222-2222-222222222222"
+
+              - Id: "77777777-7777-7777-7777-777777777777"
+                SlotNumber: 4
+                IsOccupied: true
+                ParkingLotId: "22222222-2222-2222-2222-222222222222"
+
+              - Id: "88888888-8888-8888-8888-888888888888"
+                SlotNumber: 5
+                IsOccupied: false
+                ParkingLotId: "33333333-3333-3333-3333-333333333333"
+
+          - entity: "Driver"
+            values:
+              - Id: "99999999-9999-9999-9999-999999999999"
+                Name: "Alice Johnson"
+                PhoneNumber: "9876543210"
+
+              - Id: "10101010-1010-1010-1010-101010101010"
+                Name: "Bob Smith"
+                PhoneNumber: "1231231234"
+
+              - Id: "20202020-2020-2020-2020-202020202020"
+                Name: "Charlie Brown"
+                PhoneNumber: "4564564567"
+
+          - entity: "Vehicle"
+            values:
+              - Id: "33333333-3333-3333-3333-333333333333"
+                LicensePlate: "XYZ987"
+                Type: "SUV"
+                ParkingSlotId: "55555555-5555-5555-5555-555555555555"
+                DriverId: "99999999-9999-9999-9999-999999999999"
+
+              - Id: "44444444-4444-4444-4444-444444444444"
+                LicensePlate: "DEF456"
+                Type: "Truck"
+                ParkingSlotId: "77777777-7777-7777-7777-777777777777"
+                DriverId: "10101010-1010-1010-1010-101010101010"
+
+              - Id: "55555555-5555-5555-5555-555555555555"
+                LicensePlate: "ABC123"
+                Type: "Sedan"
+                ParkingSlotId: "66666666-6666-6666-6666-666666666666"
+                DriverId: "20202020-2020-2020-2020-202020202020"
+

@@ -1,0 +1,200 @@
+version: "1.0"
+solution:
+  name: "LibraryAPI"
+  outputPath: "C:/Projects/LibraryAPI"
+  projects:
+    - name: "LibraryAPI"
+      type: "webapi"
+      targetFramework: "net8.0"
+      features:
+        - swagger
+        - logging
+        - entityframework
+        - automapper
+
+      models:
+        - name: "Author"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "FirstName"
+              type: "string"
+              maxLength: 50
+              required: true
+            - name: "LastName"
+              type: "string"
+              maxLength: 50
+              required: true
+            - name: "DateOfBirth"
+              type: "DateTime"
+              required: true
+
+        - name: "Book"
+          properties:
+            - name: "Id"
+              type: "Guid"
+              isPrimaryKey: true
+            - name: "Title"
+              type: "string"
+              maxLength: 100
+              required: true
+            - name: "Genre"
+              type: "string"
+              maxLength: 50
+              required: true
+            - name: "PublishedDate"
+              type: "DateTime"
+              required: true
+            - name: "AuthorId"
+              type: "Guid"
+              isFK: true
+              references: "Author"
+
+      dtos:
+        - name: "AuthorDto"
+          model: "Author"
+          properties:
+            - name: "Id"
+              type: "Guid"
+            - name: "FirstName"
+              type: "string"
+            - name: "LastName"
+              type: "string"
+            - name: "DateOfBirth"
+              type: "DateTime"
+
+        - name: "AddAuthorRequestDto"
+          model: "Author"
+          properties:
+            - name: "FirstName"
+              type: "string"
+            - name: "LastName"
+              type: "string"
+            - name: "DateOfBirth"
+              type: "DateTime"
+
+        - name: "UpdateAuthorRequestDto"
+          model: "Author"
+          properties:
+            - name: "FirstName"
+              type: "string"
+            - name: "LastName"
+              type: "string"
+            - name: "DateOfBirth"
+              type: "DateTime"
+
+        - name: "BookDto"
+          model: "Book"
+          properties:
+            - name: "Id"
+              type: "Guid"
+            - name: "Title"
+              type: "string"
+            - name: "Genre"
+              type: "string"
+            - name: "PublishedDate"
+              type: "DateTime"
+            - name: "AuthorId"
+              type: "Guid"
+            - name: "Author"
+              type: "AuthorDto"
+
+        - name: "AddBookRequestDto"
+          model: "Book"
+          properties:
+            - name: "Title"
+              type: "string"
+            - name: "Genre"
+              type: "string"
+            - name: "PublishedDate"
+              type: "DateTime"
+            - name: "AuthorId"
+              type: "Guid"
+
+        - name: "UpdateBookRequestDto"
+          model: "Book"
+          properties:
+            - name: "Title"
+              type: "string"
+            - name: "Genre"
+              type: "string"
+            - name: "PublishedDate"
+              type: "DateTime"
+            - name: "AuthorId"
+              type: "Guid"
+
+      repositories:
+        - name: "IAuthorRepository"
+          model: "Author"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "IBookRepository"
+          model: "Book"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+      controllers:
+        - name: "AuthorsController"
+          model: "Author"
+          dto: "AuthorDto"
+          createDto: "AddAuthorRequestDto"
+          updateDto: "UpdateAuthorRequestDto"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+        - name: "BooksController"
+          model: "Book"
+          dto: "BookDto"
+          createDto: "AddBookRequestDto"
+          updateDto: "UpdateBookRequestDto"
+          operations:
+            - "GetAll"
+            - "GetById"
+            - "Create"
+            - "Update"
+            - "Delete"
+
+      dbContext:
+        name: "LibraryDbContext"
+        connectionString: "Server=localhost;Database=LibraryDB;Trusted_Connection=True;TrustServerCertificate=True"
+
+      seedData:
+        - entity: "Author"
+          values:
+            - Id: "11111111-1111-1111-1111-111111111111"
+              FirstName: "John"
+              LastName: "Doe"
+              DateOfBirth: "1980-01-01T00:00:00"
+
+            - Id: "22222222-2222-2222-2222-222222222222"
+              FirstName: "Jane"
+              LastName: "Smith"
+              DateOfBirth: "1975-05-15T00:00:00"
+
+        - entity: "Book"
+          values:
+            - Id: "33333333-3333-3333-3333-333333333333"
+              Title: "The Great Adventure"
+              Genre: "Fiction"
+              PublishedDate: "2020-06-01T00:00:00"
+              AuthorId: "11111111-1111-1111-1111-111111111111"
+
+            - Id: "44444444-4444-4444-4444-444444444444"
+              Title: "Science Wonders"
+              Genre: "Non-Fiction"
+              PublishedDate: "2018-10-10T00:00:00"
+              AuthorId: "22222222-2222-2222-2222-222222222222"
